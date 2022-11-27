@@ -61,8 +61,14 @@ function SignIn() {
 							/>
 						</div>
 						<div className='flex gap-5 mt-5'>
-							<button className='bg-light-green text-white'>Sign In</button>
-							<button onClick={onSignUpClicked} className='bg-gray text-white'>
+							<button type='submit' className='bg-light-green text-white'>
+								Sign In
+							</button>
+							<button
+								type='button'
+								onClick={onSignUpClicked}
+								className='bg-gray text-white'
+							>
 								Sign Up
 							</button>
 						</div>

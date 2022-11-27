@@ -26,7 +26,6 @@ function FormInput<FormValueType>({
 	errors,
 	...otherProps
 }: IProps<FormValueType>) {
-	console.log(errors);
 	const errorMessage = _.get(errors, name);
 	const hasError = errors && errorMessage;
 
