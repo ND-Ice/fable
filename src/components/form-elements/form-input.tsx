@@ -1,21 +1,22 @@
-import _ from 'lodash';
+import * as _ from 'lodash';
 import classNames from 'classnames';
 import {
 	Path,
-	DeepMap,
-	FieldError,
 	FieldValues,
 	RegisterOptions,
 	UseFormRegister,
+	DeepMap,
+	FieldError,
+	ErrorOption,
 } from 'react-hook-form';
 
 interface IProps<FormValueType>
 	extends React.InputHTMLAttributes<HTMLInputElement> {
-	name: Path<FormValueType>;
+	name: Path<FormValueType & FieldValues>;
 	label?: string;
 	register?: UseFormRegister<FormValueType & FieldValues>;
 	rules?: RegisterOptions;
-	errors?: DeepMap<FormValueType, FieldError>;
+	errors?: Partial<DeepMap<FormValueType, FieldError>>;
 }
 
 function FormInput<FormValueType>({
@@ -26,8 +27,8 @@ function FormInput<FormValueType>({
 	errors,
 	...otherProps
 }: IProps<FormValueType>) {
-	const errorMessage = _.get(errors, name);
-	const hasError = errors && errorMessage;
+	const error = _.get(errors, name) as ErrorOption;
+	const hasError = errors && error;
 
 	return (
 		<div className='space-y-2'>
@@ -40,7 +41,7 @@ function FormInput<FormValueType>({
 				{...(register && register(name, rules))}
 				{...otherProps}
 			/>
-			{hasError && <p className='text-red'>{errorMessage?.message}</p>}
+			{hasError && <p className='text-red'>{error?.message}</p>}
 		</div>
 	);
 }

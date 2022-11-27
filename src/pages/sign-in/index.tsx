@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import signInBanner from '@/assets/images/sign-in-banner.png';
 import FormInput from '@/components/form-elements/form-input';
 import MainLayout from '@/layouts/main-layout';
+import React from 'react';
 
 type FormValueType = {
 	email: string;
@@ -21,14 +22,15 @@ const schema = yup.object({
 function SignIn() {
 	const router = useRouter();
 	const {
-		register,
 		handleSubmit,
+		register,
 		formState: { errors },
 	} = useForm<FormValueType>({ resolver: yupResolver(schema) });
 
 	const onSignUpClicked = () => router.push('/sign-up');
-	const handleFormSubmit = (value: FormValueType) =>
-		alert(JSON.stringify(value, null, 2));
+
+	const handleFormSubmit = (values: FormValueType) =>
+		alert(JSON.stringify(values, null, 2));
 
 	return (
 		<MainLayout>
