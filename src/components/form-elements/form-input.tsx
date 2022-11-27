@@ -1,15 +1,47 @@
-interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	name: string;
+import _ from 'lodash';
+import classNames from 'classnames';
+import {
+	Path,
+	DeepMap,
+	FieldError,
+	FieldValues,
+	RegisterOptions,
+	UseFormRegister,
+} from 'react-hook-form';
+
+interface IProps<FormValueType>
+	extends React.InputHTMLAttributes<HTMLInputElement> {
+	name: Path<FormValueType>;
 	label?: string;
+	register?: UseFormRegister<FormValueType & FieldValues>;
+	rules?: RegisterOptions;
+	errors?: DeepMap<FormValueType, FieldError>;
 }
 
-function FormInput({ name, label, ...otherProps }: IProps) {
+function FormInput<FormValueType>({
+	name,
+	label,
+	register,
+	rules,
+	errors,
+	...otherProps
+}: IProps<FormValueType>) {
+	console.log(errors);
+	const errorMessage = _.get(errors, name);
+	const hasError = errors && errorMessage;
+
 	return (
 		<div className='space-y-2'>
 			<label className='text-sub-foot-note text-secondary' htmlFor={name}>
 				{label}
 			</label>
-			<input type='text' id={name} {...otherProps} />
+			<input
+				id={name}
+				className={classNames({ 'border-red': hasError })}
+				{...(register && register(name, rules))}
+				{...otherProps}
+			/>
+			{hasError && <p className='text-red'>{errorMessage?.message}</p>}
 		</div>
 	);
 }

@@ -1,10 +1,15 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+
+import signInBanner from '@/assets/images/sign-in-banner.png';
 import FormInput from '@/components/form-elements/form-input';
 import MainLayout from '@/layouts/main-layout';
 
-import signInBanner from '@/assets/images/sign-in-banner.png';
-
 function SignUp() {
+	const router = useRouter();
+
+	const onSignInClicked = () => router.push('/sign-in');
+
 	return (
 		<MainLayout>
 			<main className='p-5 md:px-14 mb-20'>
@@ -39,7 +44,9 @@ function SignUp() {
 						</div>
 						<div className='flex gap-5 mt-5'>
 							<button className='bg-light-green text-white'>Sign Up</button>
-							<button className='bg-gray text-white'>Sign In</button>
+							<button onClick={onSignInClicked} className='bg-gray text-white'>
+								Sign In
+							</button>
 						</div>
 					</div>
 					<Image
