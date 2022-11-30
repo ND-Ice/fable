@@ -1,21 +1,51 @@
-interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	name: string;
+import _ from 'lodash';
+import {
+	UseFormRegister,
+	FieldValues,
+	Path,
+	RegisterOptions,
+	DeepMap,
+	FieldError,
+	ErrorOption,
+} from 'react-hook-form';
+import FormErrorMessage from './form-error-message';
+
+interface IProps<FormValueType>
+	extends React.InputHTMLAttributes<HTMLInputElement> {
+	name: Path<FormValueType & FieldValues>;
 	label?: string;
+	register?: UseFormRegister<FormValueType & FieldValues>;
+	rules?: RegisterOptions;
+	errors?: Partial<DeepMap<FormValueType, FieldError>>;
 }
 
-function FormCheckBox({ name, label, ...otherProps }: IProps) {
+function FormCheckBox<FormValueType>({
+	name,
+	label,
+	register,
+	rules,
+	errors,
+	...otherProps
+}: IProps<FormValueType>) {
+	const error = _.get(errors, name) as ErrorOption;
+	const hasError = errors && error ? true : false;
+
 	return (
-		<div className='flex flex-row-reverse gap-5 items-center'>
-			<label className='block flex-1 text-sub-foot-note' htmlFor={name}>
-				{label}
-			</label>
-			<input
-				className='h-5 w-5'
-				type='checkbox'
-				name={name}
-				id={name}
-				{...otherProps}
-			/>
+		<div className='space-y-2'>
+			<div className='flex flex-row-reverse items-center gap-5 accent-secondary'>
+				<label className='block flex-1 text-sub-foot-note' htmlFor={name}>
+					{label}
+				</label>
+				<input
+					className='h-5 w-5'
+					type='checkbox'
+					name={name}
+					id={name}
+					{...(register && register(name, rules))}
+					{...otherProps}
+				/>
+			</div>
+			<FormErrorMessage visible={hasError} error={error} />
 		</div>
 	);
 }

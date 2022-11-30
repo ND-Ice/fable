@@ -4,7 +4,7 @@ import shorts from '@/assets/images/shorts.png';
 
 const products = [
 	{
-		id: 1,
+		id: '1',
 		name: 'Jacket KLS',
 		image: jackets,
 		price: 105,
@@ -14,7 +14,7 @@ const products = [
 		sizes: ['XS', 'S', 'M', 'L', 'XL'],
 	},
 	{
-		id: 2,
+		id: '2',
 		name: 'PWETA Jeans',
 		image: jeans,
 		price: 105,
@@ -24,7 +24,7 @@ const products = [
 		sizes: ['XS', 'S', 'M', 'L', 'XL'],
 	},
 	{
-		id: 3,
+		id: '3',
 		name: 'Galactic Shorts',
 		image: shorts,
 		price: 105,

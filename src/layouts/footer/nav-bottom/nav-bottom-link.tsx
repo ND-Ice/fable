@@ -1,19 +1,19 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 type Props = {
-	text: string;
-	path: string;
+  text: string;
+  path: string;
 };
 
 function NavBottomLink({ text, path }: Props) {
-	return (
-		<Link
-			href={path}
-			className='text-caption-1 block text-white whitespace-nowrap'
-		>
-			{text}
-		</Link>
-	);
+  return (
+    <Link
+      href={path}
+      className="block whitespace-nowrap text-caption-1 text-white"
+    >
+      {text}
+    </Link>
+  );
 }
 
 export default NavBottomLink;

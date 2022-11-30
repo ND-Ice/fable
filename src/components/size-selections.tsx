@@ -1,31 +1,60 @@
+import _ from 'lodash';
 import classNames from 'classnames';
-import SizeType from '../types/size-type';
+import {
+	Control,
+	DeepMap,
+	ErrorOption,
+	FieldError,
+	FieldValues,
+	Path,
+	RegisterOptions,
+	useController,
+} from 'react-hook-form';
 
-type Props = {
+import SizeType from '../types/size-type';
+import FormErrorMessage from './form-elements/form-error-message';
+
+type Props<FormValueType> = {
+	name: Path<FormValueType>;
 	label: string;
-	selectedSize: SizeType | string;
 	sizes: SizeType[];
-	onSelectSize: (size: SizeType) => void;
+	control?: Control<FieldValues & FormValueType>;
+	rules?: RegisterOptions;
+	errors?: Partial<DeepMap<FormValueType, FieldError>>;
 };
 
-function SizeSelections({ label, selectedSize, sizes, onSelectSize }: Props) {
+function SizeSelections<FormValueType>({
+	label,
+	sizes,
+	name,
+	control,
+	rules,
+	errors,
+}: Props<FormValueType>) {
+	const {
+		field: { value, onChange },
+	} = useController({ name, control, rules });
+	const error = _.get(errors, name) as ErrorOption;
+	const hasError = errors && error ? true : false;
+
 	return (
-		<div>
-			<h1 className='text-sub-foot-note-1 mb-5 lg:hidden'>{label}</h1>
-			<div className='flex flex-wrap gap-4 justify-center lg:justify-start'>
+		<div className='space-y-2'>
+			<h1 className='mb-5 text-sub-foot-note-1 lg:hidden'>{label}</h1>
+			<div className='flex flex-wrap justify-center gap-4 lg:justify-start'>
 				{sizes.map((size) => (
 					<div
 						key={size}
-						onClick={() => onSelectSize(size)}
 						className={classNames(
-							'grid place-items-center text-sub-title-1 flex-shrink-0 cursor-pointer w-[50px] h-[50px] transition-all duration-300 ease-in-out border-2 border-gray-2 ring-4 ring-transparent ring-offset-2',
-							{ 'ring-sky-300': selectedSize === size }
+							'grid h-[50px] w-[50px] flex-shrink-0 cursor-pointer place-items-center border-2 border-gray-2 text-sub-title-1 ring-4 ring-transparent ring-offset-2 transition-all duration-300 ease-in-out',
+							{ 'ring-sky-300': value === size }
 						)}
+						onClick={() => onChange(size)}
 					>
 						{size}
 					</div>
 				))}
 			</div>
+			<FormErrorMessage visible={hasError} error={error} />
 		</div>
 	);
 }

@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 @layer base {
-	* {
-		@apply select-none;
-	}
+  * {
+    @apply select-none;
+  }
 
-	input {
-		@apply p-2 px-4 text-sub-title-1 border border-secondary w-full bg-transparent focus:outline-none;
-	}
+  input {
+    @apply w-full border border-secondary bg-transparent p-2 px-4 text-sub-title-1 focus:outline-none;
+  }
 
-	textarea {
-		@apply p-2 px-4 text-sub-title-1 border border-secondary w-full bg-transparent focus:outline-none;
-	}
+  textarea {
+    @apply w-full border border-secondary bg-transparent p-2 px-4 text-sub-title-1 focus:outline-none;
+  }
 
-	button {
-		@apply p-2 px-4 text-sub-title-1 text-secondary w-full bg-white;
-	}
+  button {
+    @apply w-full bg-white p-2 px-4 text-sub-title-1 text-secondary;
+  }
 }

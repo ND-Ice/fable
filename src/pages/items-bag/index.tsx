@@ -1,96 +1,53 @@
-import { useState } from 'react';
-
 import BagItemCard from '@/components/bag-item-card';
-import FormInput from '@/components/form-elements/form-input';
-import FormRadioButton from '@/components/form-elements/form-radio-button';
-import MainLayout from '@/layouts/main-layout';
-import FormTextArea from '@/components/form-elements/form-text-area';
-import FormCheckBox from '@/components/form-elements/form-checkbox';
 import BillInformation from '@/components/bill-information';
+import useShoppingCart from '@/hooks/use-shopping-cart';
+import MainLayout from '@/layouts/main-layout';
+import DeliveryForm from './delivery-form';
 
 function ItemsBag() {
-	const [deliveryMethod, setDeliveryMethod] = useState<string>('');
-	const [paymentMethod, setPaymentMethod] = useState<string>('');
+	const { cartItems, deleteToCart } = useShoppingCart();
+
+	const handleDeleteClicked = (id: string) => {
+		if (!deleteToCart) return;
+		deleteToCart(id);
+	};
 
 	return (
 		<MainLayout>
-			<main className='p-5 md:px-14 mb-20'>
+			<main className='mb-20 p-5 md:px-14'>
 				<header className='mb-5'>
-					<div className='flex gap-5 items-center'>
+					<div className='flex items-center gap-5'>
 						<h1 className='text-caption-2 font-bold'>Shopping Bag</h1>
 						<div className='h-[2px] w-5 bg-secondary' />
 						<h1 className='text-caption-2 font-bold'>Order</h1>
 					</div>
 				</header>
-				<div className='flex flex-col gap-14 lg:flex-row'>
-					<div className='flex-1 space-y-8'>
-						<div className='w-max'>
-							<h1 className='text-sub-title'>City</h1>
-							<FormInput name='city' placeholder='Enter City' />
-						</div>
-						<div>
-							<h1 className='text-sub-title mb-2'>Delivery Method</h1>
-							<FormRadioButton
-								selectedOption={deliveryMethod}
-								onSelect={(value) => setDeliveryMethod(value)}
-								options={[
-									{ label: 'In-store pick up', value: 'store-pickup' },
-									{ label: 'To the door', value: 'to-the-door' },
-								]}
-							/>
-						</div>
-						<div>
-							<h1 className='text-sub-title'>Address</h1>
-							<FormInput name='address' placeholder='Enter Address' />
-						</div>
-
-						<div className='space-y-4'>
-							<h1 className='text-sub-title text-secondary'>
-								Recipients Details
-							</h1>
-							<FormInput
-								name='fullname'
-								label='Full Name'
-								placeholder='Enter Full Name'
-							/>
-							<FormInput name='phone' label='Phone' placeholder='Enter Phone' />
-							<FormInput name='email' label='Email' placeholder='Enter Email' />
-						</div>
-						<div>
-							<h1 className='text-sub-title mb-2'>Payment Method</h1>
-							<FormRadioButton
-								selectedOption={paymentMethod}
-								onSelect={(value) => setPaymentMethod(value)}
-								options={[
-									{ label: 'Payment Card', value: 'payment-card' },
-									{ label: 'Cash on Delivery', value: 'cash-on-delivery' },
-								]}
-							/>
-						</div>
-						<div>
-							<h1 className='text-sub-title mb-2'>Order Comment</h1>
-							<FormTextArea
-								rows={3}
-								name='orderComment'
-								placeholder='Order Comment'
-							/>
-						</div>
-						<FormCheckBox
-							name='I agree'
-							label='I agree to the terms of the offer and the loyalty policy'
-						/>
-						<button className='bg-light-gray text-sub-title text-white p-3'>
-							Place an Order
-						</button>
-					</div>
-					<div className='flex-1 grid grid-flow-row h-max gap-5'>
-						<BagItemCard selectedId='1' />
-						<BagItemCard selectedId='1' />
-						<BagItemCard selectedId='1' />
-						<div className='w-full mt-5'>
-							<BillInformation />
+				{cartItems?.length !== 0 && (
+					<div className='flex flex-col gap-14 lg:flex-row'>
+						<DeliveryForm />
+						<div className='grid h-max flex-1 grid-flow-row gap-5'>
+							{cartItems?.map((cartItem) => (
+								<BagItemCard
+									key={cartItem.cartId}
+									cartId={cartItem.cartId}
+									productId={cartItem.productId}
+									qty={cartItem.qty}
+									size={cartItem.size}
+									color={cartItem.color}
+									onDeleteClick={handleDeleteClicked}
+								/>
+							))}
+							<div className='mt-5 w-full'>
+								<BillInformation />
+							</div>
 						</div>
 					</div>
+				)}
+				<div className='mt-20 grid place-items-center gap-5'>
+					<h1 className='text-title-lg-4'>Your Shopping bag is Empty.</h1>
+					<button className='w-max border border-secondary px-10'>
+						Go to shopping
+					</button>
 				</div>
 			</main>
 		</MainLayout>

@@ -1,5 +1,5 @@
 {
-	"name": "fable-next-firebase",
+	"name": "fable-next-js",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
@@ -11,7 +11,7 @@
 	"dependencies": {
 		"@heroicons/react": "^2.0.13",
 		"@hookform/resolvers": "^2.9.10",
-		"@next/font": "^13.0.5",
+		"@next/font": "^13.0.3",
 		"@types/node": "18.11.9",
 		"@types/react": "18.0.25",
 		"@types/react-dom": "18.0.8",
@@ -23,13 +23,18 @@
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-hook-form": "^7.39.6",
+		"react-hot-toast": "^2.4.0",
 		"typescript": "4.8.4",
+		"uuid": "^9.0.0",
 		"yup": "^0.32.11"
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.14.190",
+		"@types/uuid": "^9.0.0",
 		"autoprefixer": "^10.4.13",
 		"postcss": "^8.4.19",
+		"prettier": "^2.8.0",
+		"prettier-plugin-tailwindcss": "^0.2.0",
 		"tailwindcss": "^3.2.4"
 	}
 }

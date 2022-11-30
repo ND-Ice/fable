@@ -1,19 +1,21 @@
+import useShoppingCart from '@/hooks/use-shopping-cart';
 import AppLogo from '@/components/app-logo';
-import Link from 'next/link';
-import React from 'react';
 import NavLink from './nav-link';
 
 function Header() {
+	const { cartItems } = useShoppingCart();
+	const itemsCount = cartItems?.length ? `(${cartItems.length})` : '';
+
 	return (
-		<header className='sticky top-0 bg-white z-50'>
+		<header className='sticky top-0 z-50 bg-white'>
 			<nav className='flex justify-between gap-5 p-5 md:px-14'>
 				<AppLogo />
-				<div className='hidden md:block space-x-5'>
+				<div className='hidden space-x-5 md:block'>
 					<NavLink text='Collections' path='/collections' />
 					<NavLink text='Sale' path='/sale' />
 				</div>
 				<div className='space-x-5'>
-					<NavLink text='Items' path='/items-bag' />
+					<NavLink text={`Items${itemsCount}`} path='/items-bag' />
 					<NavLink text='Profile' path='/profile' />
 				</div>
 			</nav>

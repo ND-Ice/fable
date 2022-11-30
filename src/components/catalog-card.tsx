@@ -15,7 +15,7 @@ function CatalogCard({ id, image, name, price }: Props) {
 			<Image
 				src={image}
 				alt='Product Catalog'
-				className='w-full h-[157px] lg:h-[400px] object-cover object-center'
+				className='h-[157px] w-full object-cover object-center lg:h-[400px]'
 			/>
 			<div className='mt-3 text-center'>
 				<h1 className='text-foot-note opacity-40'>{name}</h1>

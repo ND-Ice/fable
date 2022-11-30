@@ -1,36 +1,59 @@
+import _ from 'lodash';
 import classNames from 'classnames';
+import {
+	useController,
+	FieldValues,
+	Path,
+	RegisterOptions,
+	Control,
+	DeepMap,
+	FieldError,
+	ErrorOption,
+} from 'react-hook-form';
+import FormErrorMessage from './form-elements/form-error-message';
 
-type Props = {
+type Props<FormValueType> = {
+	name: Path<FormValueType & FieldValues>;
 	label: string;
-	selectedColor: string;
 	colors: string[];
-	onSelectColor: (color: string) => void;
+	rules?: RegisterOptions;
+	control?: Control<FieldValues & FormValueType>;
+	errors: Partial<DeepMap<FormValueType, FieldError>>;
 };
 
-function ColorSelections({
+function ColorSelections<FormValueType>({
+	name,
+	control,
+	rules,
 	label,
-	selectedColor,
 	colors,
-	onSelectColor,
-}: Props) {
+	errors,
+}: Props<FormValueType>) {
+	const {
+		field: { value, onChange },
+	} = useController({ name, control, rules });
+	const error = _.get(errors, name) as ErrorOption;
+	const hasError = errors && error ? true : false;
+
 	return (
-		<div>
-			<h1 className='text-sub-foot-note-1 mb-5 lg:hidden'>{label}</h1>
-			<div className='flex flex-wrap gap-5 justify-center lg:justify-start'>
-				{colors.map((color) => (
+		<div className='space-y-2'>
+			<h1 className='mb-5 text-sub-foot-note-1 lg:hidden'>{label}</h1>
+			<div className='flex flex-wrap justify-center gap-5 lg:justify-start'>
+				{colors?.map((color) => (
 					<div
 						key={color}
 						className={classNames(
-							'h-[22px] w-[22px] lg:w-[40px] lg:h-[40px] flex-shrink-0 ring-4 ring-offset-4 ring-transparent cursor-pointer transition-all duration-300 ease-in-out',
+							'h-[22px] w-[22px] flex-shrink-0 cursor-pointer ring-4 ring-transparent ring-offset-4 transition-all duration-300 ease-in-out lg:h-[40px] lg:w-[40px]',
 							{
-								'ring-sky-300': selectedColor === color,
+								'ring-sky-300': value === color,
 							}
 						)}
 						style={{ background: color }}
-						onClick={() => onSelectColor(color)}
+						onClick={() => onChange(color)}
 					/>
 				))}
 			</div>
+			<FormErrorMessage visible={hasError} error={error} />
 		</div>
 	);
 }

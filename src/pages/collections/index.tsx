@@ -17,20 +17,18 @@ function Collections() {
 	const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) =>
 		setSelectedOption(e.target.value);
 
-	console.log(selectedOption);
-
 	return (
 		<MainLayout>
-			<main className='p-5 md:px-14 mb-20'>
-				<header className='flex mb-5 gap-5 justify-between'>
-					<h1 className='uppercase text-title'>Collections</h1>
+			<main className='mb-20 p-5 md:px-14'>
+				<header className='mb-5 flex justify-between gap-5'>
+					<h1 className='text-title uppercase'>Collections</h1>
 					<Sorter
 						options={options}
 						selectedOption={selectedOption}
 						onSelect={handleSelect}
 					/>
 				</header>
-				<div className='grid gap-5 grid-cols-mobile-catalog-list lg:grid-cols-desktop-catalog-list'>
+				<div className='grid grid-cols-mobile-catalog-list gap-5 lg:grid-cols-desktop-catalog-list'>
 					{products.map((product) => (
 						<CatalogCard key={product.id} {...product} />
 					))}

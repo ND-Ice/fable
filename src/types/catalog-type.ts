@@ -1,5 +1,5 @@
 type CatalogType = {
-	id: number | string;
+	id: string;
 	image: string | any;
 	name: string;
 	price: number;

@@ -1,20 +1,32 @@
 import Image from 'next/image';
 import React, { useMemo, useState } from 'react';
 
-import jackets from '@/assets/images/jackets.png';
 import products from '@/data/products';
 import QuantityIncrementor from './quantity-incrementor';
+import SizeType from '@/types/size-type';
 
 type Props = {
-	selectedId: string | number;
+	cartId: string;
+	productId: string | number;
+	size: SizeType;
+	color: string;
+	qty: number;
+	onDeleteClick: (id: string) => void;
 };
 
-function BagItemCard({ selectedId }: Props) {
-	const [quantity, setQuantity] = useState<number>(1);
+function BagItemCard({
+	cartId,
+	productId,
+	size,
+	color,
+	qty,
+	onDeleteClick,
+}: Props) {
+	const [quantity, setQuantity] = useState<number>(qty);
 
-	const selectedItem = useMemo(
-		() => products.find((product) => product.id === selectedId),
-		[selectedId]
+	const product = useMemo(
+		() => products.find((product) => product.id === productId),
+		[productId]
 	);
 
 	const handleDecrementClick = (value: number) => {
@@ -26,33 +38,38 @@ function BagItemCard({ selectedId }: Props) {
 	};
 
 	return (
-		<div className='flex gap-5 h-max'>
+		<div className='flex h-max gap-5'>
 			<Image
-				src={jackets}
+				src={product?.image!}
 				alt='Bag Item Image'
-				className='w-[80px] h-[100px] md:w-[180px] md:h-[200px] object-cover object-center'
+				className='h-[100px] w-[80px] object-cover object-center md:h-[200px] md:w-[180px]'
 			/>
-			<div className='flex-1 flex flex-col p-2 justify-between'>
-				<h1 className='uppercase text-sub-foot-note-1'>Jackets KLS</h1>
+			<div className='flex flex-1 flex-col justify-between p-2'>
+				<h1 className='text-sub-foot-note-1 uppercase'>{product?.name}</h1>
 				<div className='space-y-8'>
-					<div className='flex gap-5 items-center justify-between'>
+					<div className='flex items-center justify-between gap-5'>
 						<div className='space-x-2'>
 							<span className='text-body-1'>Size:</span>
-							<span className='text-body-2'>M</span>
+							<span className='text-body-2'>{size}</span>
 						</div>
 						<div className='space-x-2'>
 							<span className='text-body-1'>Color:</span>
-							<span className='text-body-2'>Blue</span>
+							<span className='text-body-2 capitalize'>{color}</span>
 						</div>
 						<QuantityIncrementor
-							value={quantity}
+							value={qty}
 							onDecrementClick={handleDecrementClick}
 							onIncrementClick={handleIncrementClick}
 						/>
 					</div>
 					<div className='flex items-center justify-between gap-5'>
-						<span className='text-body-2'>€105</span>
-						<span className='text-body-1 text-light-gray'>Delete</span>
+						<span className='text-body-2'>€{product?.price}</span>
+						<span
+							className='cursor-pointer text-body-1 text-light-gray'
+							onClick={() => onDeleteClick(cartId as string)}
+						>
+							Delete
+						</span>
 					</div>
 				</div>
 			</div>
