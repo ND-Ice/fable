@@ -91,7 +91,7 @@ function ViewProduct() {
 							errors={errors}
 							sizes={sizes}
 						/>
-						<button className='w-max bg-gray px-10 text-white'>
+						<button type='submit' className='w-max bg-gray px-10 text-white'>
 							Add To Cart
 						</button>
 						<div className='space-y-2'>

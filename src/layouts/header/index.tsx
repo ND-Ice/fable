@@ -9,8 +9,10 @@ function Header() {
 	return (
 		<header className='sticky top-0 z-50 bg-white'>
 			<nav className='flex justify-between gap-5 p-5 md:px-14'>
-				<AppLogo />
-				<div className='hidden space-x-5 md:block'>
+				<div className='hidden lg:inline-block'>
+					<AppLogo />
+				</div>
+				<div className='space-x-5 md:block'>
 					<NavLink text='Collections' path='/collections' />
 					<NavLink text='Sale' path='/sale' />
 				</div>

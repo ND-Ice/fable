@@ -1,17 +1,19 @@
 import Image from 'next/image';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import products from '@/data/products';
-import QuantityIncrementor from './quantity-incrementor';
 import SizeType from '@/types/size-type';
+import QuantityIncrementor from './quantity-incrementor';
 
 type Props = {
 	cartId: string;
-	productId: string | number;
+	productId: string;
 	size: SizeType;
 	color: string;
 	qty: number;
 	onDeleteClick: (id: string) => void;
+	onIncrementClick: (id: string) => void;
+	onDecrementClick: (id: string) => void;
 };
 
 function BagItemCard({
@@ -20,22 +22,14 @@ function BagItemCard({
 	size,
 	color,
 	qty,
+	onIncrementClick,
+	onDecrementClick,
 	onDeleteClick,
 }: Props) {
-	const [quantity, setQuantity] = useState<number>(qty);
-
 	const product = useMemo(
 		() => products.find((product) => product.id === productId),
 		[productId]
 	);
-
-	const handleDecrementClick = (value: number) => {
-		if (value === 1) return;
-		setQuantity(value - 1);
-	};
-	const handleIncrementClick = (value: number) => {
-		setQuantity(value + 1);
-	};
 
 	return (
 		<div className='flex h-max gap-5'>
@@ -58,8 +52,8 @@ function BagItemCard({
 						</div>
 						<QuantityIncrementor
 							value={qty}
-							onDecrementClick={handleDecrementClick}
-							onIncrementClick={handleIncrementClick}
+							onDecrementClick={() => onDecrementClick(cartId)}
+							onIncrementClick={() => onIncrementClick(cartId)}
 						/>
 					</div>
 					<div className='flex items-center justify-between gap-5'>

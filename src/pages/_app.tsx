@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import localFont from '@next/font/local';
+import { Toaster } from 'react-hot-toast';
 
 import CartProvider from '@/context/CartProvider';
 
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
 		<CartProvider>
 			<main className={myFont.className}>
 				<Component {...pageProps} />
+				<Toaster position='bottom-right' />
 			</main>
 		</CartProvider>
 	);
