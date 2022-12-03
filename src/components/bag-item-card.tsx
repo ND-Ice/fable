@@ -1,14 +1,15 @@
 import Image from 'next/image';
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import products from '@/data/products';
-import SizeType from '@/types/size-type';
 import QuantityIncrementor from './quantity-incrementor';
+import ProductType from '@/types/product-type';
+import productService from '@/services/product-service';
+import urlForImage from '@/utils/url-for-image';
 
 type Props = {
 	cartId: string;
 	productId: string;
-	size: SizeType;
+	size: string;
 	color: string;
 	qty: number;
 	onDeleteClick: (id: string) => void;
@@ -26,18 +27,27 @@ function BagItemCard({
 	onDecrementClick,
 	onDeleteClick,
 }: Props) {
-	const product = useMemo(
-		() => products.find((product) => product.id === productId),
-		[productId]
-	);
+	const [product, setProduct] = useState<ProductType | null>(null);
+
+	useEffect(() => {
+		const fetchProductsById = async () => {
+			const data = await productService.fetchProductById(productId);
+			setProduct(data);
+		};
+
+		fetchProductsById();
+	}, [productId]);
 
 	return (
 		<div className='flex h-max gap-5'>
-			<Image
-				src={product?.image!}
-				alt='Bag Item Image'
-				className='h-[100px] w-[80px] object-cover object-center md:h-[200px] md:w-[180px]'
-			/>
+			<div className='relative h-[100px] w-[80px] md:h-[200px] md:w-[180px]'>
+				<Image
+					fill
+					src={urlForImage(product?.images[0] as string)}
+					alt='Bag Item Image'
+					className=' object-cover object-center '
+				/>
+			</div>
 			<div className='flex flex-1 flex-col justify-between p-2'>
 				<h1 className='text-sub-foot-note-1 uppercase'>{product?.name}</h1>
 				<div className='space-y-8'>

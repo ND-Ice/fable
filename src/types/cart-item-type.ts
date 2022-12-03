@@ -1,10 +1,10 @@
-import SizeType from './size-type';
+import ColorType from './color-type';
 
 type CartItemType = {
 	cartId: string;
 	productId: string;
 	qty: number;
-	size: SizeType;
+	size: string;
 	color: string;
 };
 

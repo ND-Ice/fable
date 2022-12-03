@@ -11,13 +11,12 @@ import {
 	useController,
 } from 'react-hook-form';
 
-import SizeType from '../types/size-type';
 import FormErrorMessage from './form-elements/form-error-message';
 
 type Props<FormValueType> = {
 	name: Path<FormValueType>;
 	label: string;
-	sizes: SizeType[];
+	sizes: string[];
 	control?: Control<FieldValues & FormValueType>;
 	rules?: RegisterOptions;
 	errors?: Partial<DeepMap<FormValueType, FieldError>>;

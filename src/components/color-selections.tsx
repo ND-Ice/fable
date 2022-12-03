@@ -12,10 +12,12 @@ import {
 } from 'react-hook-form';
 import FormErrorMessage from './form-elements/form-error-message';
 
+import ColorType from '@/types/color-type';
+
 type Props<FormValueType> = {
 	name: Path<FormValueType & FieldValues>;
 	label: string;
-	colors: string[];
+	colors: ColorType[];
 	rules?: RegisterOptions;
 	control?: Control<FieldValues & FormValueType>;
 	errors: Partial<DeepMap<FormValueType, FieldError>>;
@@ -41,15 +43,15 @@ function ColorSelections<FormValueType>({
 			<div className='flex flex-wrap justify-center gap-5 lg:justify-start'>
 				{colors?.map((color) => (
 					<div
-						key={color}
+						key={color?._key}
 						className={classNames(
 							'h-[22px] w-[22px] flex-shrink-0 cursor-pointer ring-4 ring-transparent ring-offset-4 transition-all duration-300 ease-in-out lg:h-[40px] lg:w-[40px]',
 							{
-								'ring-sky-300': value === color,
+								'ring-sky-300': value === color.text,
 							}
 						)}
-						style={{ background: color }}
-						onClick={() => onChange(color)}
+						style={{ background: color.value }}
+						onClick={() => onChange(color.text)}
 					/>
 				))}
 			</div>
