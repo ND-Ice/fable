@@ -1,10 +1,8 @@
-import React from 'react';
 import { GetServerSideProps } from 'next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { v4 as uuidv4 } from 'uuid';
 
-import useShoppingCart from '@/hooks/use-shopping-cart';
+import urlForImage from '@/utils/url-for-image';
 import productService from '@/services/product-service';
 import ProductType from '@/types/product-type';
 import formatToCurrency from '@/utils/currency-formatter';
@@ -12,7 +10,7 @@ import Carousel from '@/components/carousel';
 import ColorSelections from '@/components/color-selections';
 import SizeSelections from '@/components/size-selections';
 import addToCartSchema from './schema';
-import urlForImage from '@/utils/url-for-image';
+import { useAddToCart } from '@/hooks/use-shopping-cart';
 
 type FormValueType = {
 	size: string;
@@ -34,8 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 function ViewProduct({ product }: ViewProductProps) {
-	const { addToCart } = useShoppingCart();
-
+	const { addToCart } = useAddToCart();
 	const {
 		control,
 		handleSubmit,
@@ -45,12 +42,10 @@ function ViewProduct({ product }: ViewProductProps) {
 	});
 
 	const handleFormSubmit = (values: FormValueType) => {
-		if (!addToCart) return;
 		addToCart({
-			cartId: uuidv4(),
-			productId: product?._id!,
-			qty: 1,
+			product: { _ref: product._id, _type: 'reference' },
 			...values,
+			quantity: 1,
 		});
 	};
 

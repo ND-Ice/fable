@@ -1,42 +1,45 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
-import QuantityIncrementor from './quantity-incrementor';
 import ProductType from '@/types/product-type';
+import ProductReference from '@/types/product-reference-type';
+import QuantityIncrementor from './quantity-incrementor';
 import productService from '@/services/product-service';
 import urlForImage from '@/utils/url-for-image';
 
-type Props = {
+type BagItemCardProps = {
 	cartId: string;
-	productId: string;
+	productRef: ProductReference;
 	size: string;
 	color: string;
-	qty: number;
+	quantity: number;
 	onDeleteClick: (id: string) => void;
 	onIncrementClick: (id: string) => void;
 	onDecrementClick: (id: string) => void;
+	onPreviewClick: (id: string) => void;
 };
 
 function BagItemCard({
 	cartId,
-	productId,
+	productRef,
 	size,
 	color,
-	qty,
+	quantity,
 	onIncrementClick,
 	onDecrementClick,
 	onDeleteClick,
-}: Props) {
+	onPreviewClick,
+}: BagItemCardProps) {
 	const [product, setProduct] = useState<ProductType | null>(null);
 
 	useEffect(() => {
 		const fetchProductsById = async () => {
-			const data = await productService.fetchProductById(productId);
+			const data = await productService.fetchProductById(productRef?._ref);
 			setProduct(data);
 		};
 
 		fetchProductsById();
-	}, [productId]);
+	}, [productRef]);
 
 	return (
 		<div className='flex h-max gap-5'>
@@ -45,7 +48,8 @@ function BagItemCard({
 					fill
 					src={urlForImage(product?.images[0] as string)}
 					alt='Bag Item Image'
-					className=' object-cover object-center '
+					className='cursor-pointer object-cover object-center'
+					onClick={() => onPreviewClick(product?._id as string)}
 				/>
 			</div>
 			<div className='flex flex-1 flex-col justify-between p-2'>
@@ -61,7 +65,7 @@ function BagItemCard({
 							<span className='text-body-2 capitalize'>{color}</span>
 						</div>
 						<QuantityIncrementor
-							value={qty}
+							value={quantity}
 							onDecrementClick={() => onDecrementClick(cartId)}
 							onIncrementClick={() => onIncrementClick(cartId)}
 						/>

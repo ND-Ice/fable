@@ -1,9 +1,9 @@
-import useShoppingCart from '@/hooks/use-shopping-cart';
+import { useFetchCartItems } from '@/hooks/use-shopping-cart';
 import AppLogo from '@/components/app-logo';
 import NavLink from './nav-link';
 
 function Header() {
-	const { cartItems } = useShoppingCart();
+	const { cartItems } = useFetchCartItems();
 	const itemsCount = cartItems?.length ? `(${cartItems.length})` : '';
 
 	return (

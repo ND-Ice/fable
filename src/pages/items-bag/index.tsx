@@ -1,25 +1,32 @@
+import { useRouter } from 'next/router';
+import {
+	useDecrementCart,
+	useFetchCartItems,
+	useIncrementCart,
+	useRemoveToCart,
+} from '@/hooks/use-shopping-cart';
 import BagItemCard from '@/components/bag-item-card';
 import BillInformation from '@/components/bill-information';
-import useShoppingCart from '@/hooks/use-shopping-cart';
 import DeliveryForm from './delivery-form';
 
 function ItemsBag() {
-	const { cartItems, deleteToCart, removeToCart, incrementCartItem } =
-		useShoppingCart();
+	const router = useRouter();
+	const { cartItems } = useFetchCartItems();
+	const { removeToCart } = useRemoveToCart();
+	const { inCrementCartItem } = useIncrementCart();
+	const { decrementCartItem } = useDecrementCart();
+
+	const handlePreviewClicked = (id: string) =>
+		router.push(`/collections/view/${id}`);
 
 	const handleDeleteClicked = (id: string) => {
-		if (!deleteToCart) return;
-		deleteToCart(id);
-	};
-
-	const handleIncrementClicked = (id: string) => {
-		if (!incrementCartItem) return;
-		incrementCartItem(id);
-	};
-
-	const handleDecrementClicked = (id: string) => {
-		if (!removeToCart) return;
 		removeToCart(id);
+	};
+	const handleIncrementClicked = (id: string) => {
+		inCrementCartItem(id);
+	};
+	const handleDecrementClicked = (id: string) => {
+		decrementCartItem(id);
 	};
 
 	return (
@@ -37,15 +44,16 @@ function ItemsBag() {
 					<div className='grid h-max flex-1 grid-flow-row gap-5'>
 						{cartItems?.map((cartItem) => (
 							<BagItemCard
-								key={cartItem.cartId}
-								cartId={cartItem.cartId}
-								productId={cartItem.productId}
-								qty={cartItem.qty}
+								key={cartItem._id!}
+								cartId={cartItem._id!}
+								productRef={cartItem.product}
+								quantity={cartItem.quantity}
 								size={cartItem.size}
 								color={cartItem.color}
 								onIncrementClick={handleIncrementClicked}
 								onDecrementClick={handleDecrementClicked}
 								onDeleteClick={handleDeleteClicked}
+								onPreviewClick={handlePreviewClicked}
 							/>
 						))}
 						<div className='mt-5 w-full'>

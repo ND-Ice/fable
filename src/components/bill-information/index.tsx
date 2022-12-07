@@ -1,19 +1,19 @@
-import { useMemo } from 'react';
 import _ from 'lodash';
+import { useMemo } from 'react';
 
-import useShoppingCart from '@/hooks/use-shopping-cart';
-import BillInfoItem from './bill-info-item';
+import { useFetchCartItems } from '@/hooks/use-shopping-cart';
 import formatToCurrency from '@/utils/currency-formatter';
+import BillInfoItem from './bill-info-item';
 
 const DELIVERY_FEE = 2;
 const POINTS = 10;
 const PROMO = 20;
 
 function BillInformation() {
-	const { cartItems } = useShoppingCart();
+	const { cartItems } = useFetchCartItems();
 
 	const SUMMARY_BILL = useMemo(() => {
-		return _.sumBy(cartItems, (cartItem) => cartItem.qty * 300);
+		return _.sumBy(cartItems, (cartItem) => cartItem.quantity * 300);
 	}, [cartItems]);
 
 	const TOTAL = SUMMARY_BILL - POINTS - PROMO + DELIVERY_FEE;

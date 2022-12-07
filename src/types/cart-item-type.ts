@@ -1,9 +1,9 @@
-import ColorType from './color-type';
+import ProductReference from './product-reference-type';
 
 type CartItemType = {
-	cartId: string;
-	productId: string;
-	qty: number;
+	_id?: string;
+	product: ProductReference;
+	quantity: number;
 	size: string;
 	color: string;
 };

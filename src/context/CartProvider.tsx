@@ -1,96 +1,68 @@
 import _ from 'lodash';
-import React, { createContext, useState } from 'react';
-import toast from 'react-hot-toast';
+import React, { createContext, Dispatch, useReducer } from 'react';
 
 import CartItemType from '@/types/cart-item-type';
 
 type CartContextType = {
-	cartItems: CartItemType[];
-	addToCart: (cartItem: CartItemType) => void;
-	removeToCart: (id: string) => void;
-	deleteToCart: (id: string) => void;
-	incrementCartItem: (id: string) => void;
+	state: CartStateType;
+	dispatch: Dispatch<CartActionType>;
 };
 
-type Props = {
+type CartProviderProps = {
 	children: React.ReactNode;
 };
 
+type CartStateType = {
+	cartItems: CartItemType[];
+};
+
+type CartActionType = {
+	type: string;
+	payload: any;
+};
+
+function cartReducer(state: CartStateType, action: CartActionType) {
+	switch (action.type) {
+		case 'CART_ITEM_ADDED':
+			return { cartItems: [...state.cartItems, action.payload] };
+
+		case 'CART_ITEM_REMOVED':
+			const filtered = state.cartItems.filter(
+				(cartItem) => cartItem._id !== action.payload.id
+			);
+			return { cartItems: filtered };
+
+		case 'CART_ITEM_INCREMENTED':
+			const incremented = state.cartItems.map((cartItem) =>
+				cartItem._id === action.payload.id
+					? { ...cartItem, quantity: cartItem.quantity + 1 }
+					: cartItem
+			);
+			return { cartItems: incremented };
+
+		case 'CART_ITEM_DECREMENTED':
+			const decremented = state.cartItems.map((cartItem) =>
+				cartItem._id === action.payload.id
+					? { ...cartItem, quantity: cartItem.quantity - 1 }
+					: cartItem
+			);
+			return { cartItems: decremented };
+
+		case 'CART_ITEMS_RECEIVED':
+			return { cartItems: action.payload };
+
+		default:
+			throw new Error();
+	}
+}
+
 export const CartContext = createContext<CartContextType | null>(null);
 
-export default function CartProvider({ children }: Props) {
-	const [cartItems, setCartItems] = useState<CartItemType[]>([]);
-
-	const addToCart = (product: CartItemType) => {
-		const alreadyInCart = _.find(cartItems, {
-			productId: product.productId,
-			color: product.color,
-			size: product.size,
-		});
-
-		if (alreadyInCart) {
-			setCartItems((prevItems) =>
-				_.map(prevItems, (cartItem) =>
-					cartItem.productId === product.productId &&
-					cartItem.color === product.color &&
-					cartItem.size === product.size
-						? { ...cartItem, qty: cartItem.qty + product.qty }
-						: cartItem
-				)
-			);
-			toast.success('Item Incremented by 1');
-		} else {
-			setCartItems((prevItems) => [...prevItems, product]);
-			toast.success('Added to cart');
-		}
-	};
-
-	const incrementCartItem = (id: string) => {
-		setCartItems((prevItems) =>
-			prevItems.map((prevItem) =>
-				prevItem.cartId === id
-					? { ...prevItem, qty: prevItem.qty + 1 }
-					: prevItem
-			)
-		);
-		toast.success('Item Incremented by 1');
-	};
-
-	const removeToCart = (id: string) => {
-		if (_.find(cartItems, { cartId: id })?.qty === 1) {
-			setCartItems((prevItems) =>
-				_.filter(prevItems, (item) => item.cartId !== id)
-			);
-			toast.success('Removed from the cart');
-		} else {
-			setCartItems((prevItems) =>
-				prevItems.map((prevItem) =>
-					prevItem.cartId === id
-						? { ...prevItem, qty: prevItem.qty - 1 }
-						: prevItem
-				)
-			);
-			toast.success('Item decreased by 1');
-		}
-	};
-
-	const deleteToCart = (id: string) => {
-		setCartItems((prevItems) =>
-			_.filter(prevItems, (cartItem) => cartItem.cartId !== id)
-		);
-		toast.success('Removed from the cart');
-	};
+export default function CartProvider({ children }: CartProviderProps) {
+	const [state, dispatch] = useReducer(cartReducer, { cartItems: [] });
 
 	return (
-		<CartContext.Provider
-			value={{
-				cartItems,
-				addToCart,
-				removeToCart,
-				deleteToCart,
-				incrementCartItem,
-			}}
-		>
+		<CartContext.Provider value={{ state, dispatch }}>
 			{children}
 		</CartContext.Provider>
 	);

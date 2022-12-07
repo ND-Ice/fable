@@ -32,7 +32,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 			<MainLayout>
 				<main className={myFont.className}>
 					<Component {...pageProps} />
-					<Toaster position='bottom-right' />
+					<Toaster />
 				</main>
 			</MainLayout>
 		</CartProvider>
