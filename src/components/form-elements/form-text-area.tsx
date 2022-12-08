@@ -12,7 +12,7 @@ import FormErrorMessage from './form-error-message';
 
 interface IProps<FormValueType>
 	extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-	name: Path<FormValueType>;
+	name: Path<FormValueType & FieldValues>;
 	label?: string;
 	register?: UseFormRegister<FormValueType & FieldValues>;
 	rules?: RegisterOptions;
