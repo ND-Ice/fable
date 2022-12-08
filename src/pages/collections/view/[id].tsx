@@ -1,7 +1,9 @@
+import * as Yup from 'yup';
 import { GetServerSideProps } from 'next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useAddToCart } from '@/hooks/use-shopping-cart';
 import urlForImage from '@/utils/url-for-image';
 import productService from '@/services/product-service';
 import ProductType from '@/types/product-type';
@@ -9,12 +11,12 @@ import formatToCurrency from '@/utils/currency-formatter';
 import Carousel from '@/components/carousel';
 import ColorSelections from '@/components/color-selections';
 import SizeSelections from '@/components/size-selections';
-import addToCartSchema from './schema';
-import { useAddToCart } from '@/hooks/use-shopping-cart';
+import FormQuantitySelector from '@/components/form-elements/form-quantity-selector';
 
 type FormValueType = {
 	size: string;
 	color: string;
+	quantity: number;
 };
 
 type ViewProductProps = {
@@ -31,6 +33,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	}
 };
 
+const addToCartSchema = Yup.object().shape({
+	size: Yup.string().required().label('Size'),
+	color: Yup.string().required().label('Color'),
+});
+
 function ViewProduct({ product }: ViewProductProps) {
 	const { addToCart } = useAddToCart();
 	const {
@@ -39,6 +46,7 @@ function ViewProduct({ product }: ViewProductProps) {
 		formState: { errors },
 	} = useForm<FormValueType>({
 		resolver: yupResolver(addToCartSchema),
+		defaultValues: { quantity: 1 },
 	});
 
 	const handleFormSubmit = (values: FormValueType) => {
@@ -80,6 +88,11 @@ function ViewProduct({ product }: ViewProductProps) {
 						control={control}
 						errors={errors}
 						sizes={product?.sizes}
+					/>
+					<FormQuantitySelector
+						name='quantity'
+						control={control}
+						errors={errors}
 					/>
 					<button type='submit' className='w-max bg-gray px-10 text-white'>
 						Add To Cart
