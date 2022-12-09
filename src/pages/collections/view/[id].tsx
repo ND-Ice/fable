@@ -53,7 +53,6 @@ function ViewProduct({ product }: ViewProductProps) {
 		addToCart({
 			product: { _ref: product._id, _type: 'reference' },
 			...values,
-			quantity: 1,
 		});
 	};
 

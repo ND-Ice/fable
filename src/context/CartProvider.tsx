@@ -33,9 +33,13 @@ function cartReducer(state: CartStateType, action: CartActionType) {
 			return { cartItems: filtered };
 
 		case 'CART_ITEM_INCREMENTED':
+			const quantity = action.payload.quantity ?? 1;
 			const incremented = state.cartItems.map((cartItem) =>
 				cartItem._id === action.payload.id
-					? { ...cartItem, quantity: cartItem.quantity + 1 }
+					? {
+							...cartItem,
+							quantity: cartItem.quantity + quantity,
+					  }
 					: cartItem
 			);
 			return { cartItems: incremented };

@@ -41,7 +41,7 @@ export const useAddToCart = () => {
 			if (isExist) {
 				cartContext?.dispatch({
 					type: 'CART_ITEM_INCREMENTED',
-					payload: { id: data?._id },
+					payload: { id: data?._id, quantity: cartItem.quantity },
 				});
 				return toast.success('Cart Item Incremented');
 			}
